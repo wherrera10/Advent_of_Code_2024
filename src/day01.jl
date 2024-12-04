@@ -9,4 +9,4 @@ function day01()
     part .= sum(abs.(a .- b)), sum(a[i] * count(==(a[i]), b) for i in eachindex(a))
 end
 
-@show day01() # 54940, 54208
+@show day01() 
