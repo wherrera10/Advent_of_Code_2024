@@ -32,4 +32,4 @@ function day04()
 	return part
 end
 
-@show day01() # 54940, 54208
+@show day01()
