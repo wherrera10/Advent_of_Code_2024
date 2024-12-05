@@ -28,11 +28,10 @@ function day05()
 		return true
 	end
 
-	for v in updates
-        if inplace(v)
-    		part[1] += v[length(v)÷2+1]
+	for a in updates
+        if inplace(a)
+    		part[1] += a[length(a)÷2+1]
         else
-            a = copy(v)
             apply = filter(r -> r[1] in a && r[2] in a, rules)
             while !inplace(a)
                 for rule in apply
