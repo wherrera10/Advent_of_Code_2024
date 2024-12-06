@@ -24,34 +24,34 @@ function day06()
     end
     part[1] = length(visited)
 
-    visited_d = Set{Vector{Int}}()
-    for v in visited
-        target = grid[v[1], v[2]]
-        if target != '#'
-            grid[v[1], v[2]] = '#'
-            d = 1
-            pos = [guard[1], guard[2]]
+    p_lock = ReentrantLock()
+    @Threads.threads for v in collect(visited)
+        if grid[v[1], v[2]] != '#'
+            g = copy(grid)
+            visited_d = Set{Vector{Int}}()
+            g[v[1], v[2]] = '#'
+            td = 1
+            p = [guard[1], guard[2]]
             while true
-                state = [pos[1], pos[2], d]
+                state = [p[1], p[2], td]
                 if state in visited_d
+                    lock(p_lock)
                     part[2] += 1
+                    unlock(p_lock)
                     break
                 end
                 push!(visited_d, state)
-                next = pos .+ DIRECTIONS[d]
+                next = p .+ DIRECTIONS[td]
                 !(1 <= next[1] <= rows && 1 <= next[2] <= cols) && break
-                if grid[next[1], next[2]] == '#'
-                    d = right_turn(d)
+                if g[next[1], next[2]] == '#'
+                    td = right_turn(td)
                 else
-                    pos = next
+                    p = next
                 end
             end
-            empty!(visited_d)
-            grid[v[1], v[2]] = target
         end
     end
     return part
-
 end
 
 @show day06()
