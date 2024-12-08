@@ -66,4 +66,4 @@ function day08()
     return part
 end
 
-@show day08() # [1530215, 26800609]
+@show day08() # [361, 1249]
