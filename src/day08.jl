@@ -25,7 +25,7 @@ function day08()
     end
 
     locations = Vector{Int}[]
-    for (c, pos) in frequencies
+    for pos in values(frequencies)
         for i in eachindex(pos)
             for j in i+1:length(pos)
                 nodes = antinodes(pos[i], pos[j])
@@ -53,7 +53,7 @@ function day08()
     end
 
     updated = Vector{Int}[]
-    for (c, pos) in frequencies
+    for pos in values(frequencies)
         for i in eachindex(pos)
             for j in i+1:length(pos)
                 nodes = updated_rules(pos[i], pos[j])
