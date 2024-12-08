@@ -1,15 +1,11 @@
-using BenchmarkTools
-
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 function day08()
     part = [0, 0]
 
     grid = stack((collect(line) for line in split(read("$DIR/day08.txt", String), "\n")), dims = 1)
     rows, cols = size(grid)
-
     delta(p1, p2) = [p2[1] - p1[1], p2[2] - p1[2]]
-#    block_distance(p1, p2) = sum(abs.(delta(p1, p2)))
 
     function antinodes(p1, p2)
         nodes = Vector{Vector{Int}}()
@@ -70,7 +66,4 @@ function day08()
     return part
 end
 
-@btime day08()
-
 @show day08() # [1530215, 26800609]
-
