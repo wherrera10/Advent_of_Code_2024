@@ -19,7 +19,7 @@ function day09()
             end
         else
             push!(runs, length(raw_disk) + 1)
-	    push!(run_sizes, n)
+            push!(run_sizes, n)
             for _ in 1:n
                 push!(raw_disk, id)
             end
