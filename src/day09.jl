@@ -51,7 +51,7 @@ function day09()
         start, stop = runs[i], runs[i] + run_sizes[i] - 1
         pos = findfirst(>=(run_sizes[i]), gap_sizes)
         if !isnothing(pos) && gaps[pos] < start
-            disk[gaps[pos]:gaps[pos]+run_sizes[i]-1] .= disk[start:stop]
+            disk[gaps[pos]:gaps[pos]+run_sizes[i]-1] .= @view disk[start:stop]
             disk[start:stop] .= -1
             gaps[pos] += run_sizes[i]
             gap_sizes[pos] -= run_sizes[i]
