@@ -5,6 +5,7 @@ function day09()
     numbers = parse.(Int, collect(read("$DIR/day09.txt", String)))
     gaps = Vector{Vector{Int}}()
     raw_disk = Int[]
+    gap_positions = Int[]
     runs, run_sizes, gaps, gap_sizes = Int[], Int[], Int[], Int[]
     is_space = false
     id = 0
@@ -48,13 +49,12 @@ function day09()
     disk = copy(raw_disk)
     for i in length(runs):-1:1
         start, stop = runs[i], runs[i] + run_sizes[i] - 1
-        len = stop - start + 1
-        pos = findfirst(>=(len), gap_sizes)
+        pos = findfirst(>=(run_sizes[i]), gap_sizes)
         if !isnothing(pos) && gaps[pos] < start
-            disk[gaps[pos]:gaps[pos]+len-1] .= disk[start:stop]
+            disk[gaps[pos]:gaps[pos]+run_sizes[i]-1] .= disk[start:stop]
             disk[start:stop] .= -1
-            gaps[pos] += len
-            gap_sizes[pos] -= len
+            gaps[pos] += run_sizes[i]
+            gap_sizes[pos] -= run_sizes[i]
         end
     end
     for i in eachindex(disk)
