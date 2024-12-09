@@ -66,6 +66,4 @@ function day09()
 
 end
 
-@btime day09()
-
 @show day09() # [6279058075753, 6301361958738]
