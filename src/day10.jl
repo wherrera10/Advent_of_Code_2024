@@ -6,7 +6,6 @@ function day10()
 	part = [0, 0]
 	mat = parse.(Int8, stack([collect(line) for line in readlines("$DIR/day10.txt")], dims = 1))
     rows, cols = size(mat)
-    directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     trailheads = collect(findall(==(0), mat))
     options = [[0,0], [0,0], [0,0],[0,0]]
     for t in trailheads
