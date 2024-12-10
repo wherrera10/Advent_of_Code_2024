@@ -1,6 +1,6 @@
 using BenchmarkTools
 
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 function day10()
 	part = [0, 0]
@@ -24,9 +24,7 @@ function day10()
         part[2] += length(trails)
     end
 
-	return part
+    return part
 end
-
-@btime day10()
 
 @show day10() # [624, 1483]
