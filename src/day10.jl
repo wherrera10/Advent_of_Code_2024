@@ -1,5 +1,3 @@
-using BenchmarkTools
-
 const DIR = "aoc_2024"
 
 function day10()
