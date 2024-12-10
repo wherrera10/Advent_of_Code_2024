@@ -6,9 +6,8 @@ function day10()
     part = [0, 0]
     mat = parse.(Int8, stack([collect(line) for line in readlines("$DIR/day10.txt")], dims = 1))
     rows, cols = size(mat)
-    trailheads = collect(findall(==(0), mat))
     options = [[0, 0], [0, 0], [0, 0], [0, 0]]
-    for t in trailheads
+    for t in findall(==(0), mat)
         trails = [[t[1], t[2]]]
         new_trails = empty(trails)
         for wanted in 1:9
