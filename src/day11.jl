@@ -18,7 +18,7 @@ function day11()
 
     new_stones = Int[]
     stones = copy(base_stones)
-    for i in 1:25
+    for _ in 1:25
         for stone in stones
             append!(new_stones, blink(stone))
         end
