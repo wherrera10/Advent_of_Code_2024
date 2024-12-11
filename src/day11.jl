@@ -1,3 +1,5 @@
+using Memoize
+
 const DIR = "aoc_2024"
 
 function day11()
@@ -5,7 +7,7 @@ function day11()
 
     base_stones = parse.(Int, split(read("$DIR/day11.txt", String), r"\s+"))
 
-    function blink(stone)
+    @memoize function blink(stone)
         iszero(stone) && return [1]
         n = ndigits(stone)
         if iseven(n)
