@@ -47,4 +47,4 @@ function day11()
     return part
 end
 
-@show day11() # [624, 1483]
+@show day11() # [193269, 228449040027793]
