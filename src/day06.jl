@@ -23,7 +23,7 @@ function day06()
 	part[1] = length(visited)
 
 	delete!(visited, [guard[1], guard[2]])
-        p_lock = ReentrantLock()
+    p_lock = ReentrantLock()
 	Threads.@threads for v in collect(visited)
 		visited_d = Set{Vector{Int}}()
 		td = 1
