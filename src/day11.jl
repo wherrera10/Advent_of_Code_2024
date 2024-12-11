@@ -1,26 +1,28 @@
 const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
 const MAX_BLINKS = 75
-const day11_int_cache = zeros(Int, 10000, MAX_BLINKS + 1) .- 1
-const day11_cache = [Dict{Int, Int}() for _ in 1:MAX_BLINKS]
+const CACHE_SIZE = MAX_BLINKS * 10_000_000
+const day11_int_cache = zeros(Int, CACHE_SIZE)
+const day11_cache = Dict{Int, Int}()
 
 function day11_blink(stone, n)
     n < 1 && return 1
     n -= 1
     iszero(stone) && return day11_blink(1, n)
-    if stone < 10000 && (cached = day11_int_cache[stone, n + 1] != -1)
+    key = stone * CACHE_SIZE + n
+    if key <= CACHE_SIZE && (cached = day11_int_cache[key] > 0)
         return cached
     end
-    if (cached = get(day11_cache[n + 1], stone, -1)) != -1
+    if (cached = get(day11_cache[key], stone, -1)) != -1
         return cached 
     end
     d = ndigits(stone)
     len = iseven(d) ? 
-        (i = 10^(d ÷ 2); day11_blink(stone ÷ i, n) + day11_blink(stone % i, n)) :
-        day11_blink(stone * 2024, n)
-    if stone >= 10000
-        day11_cache[n + 1][stone] = len
+          (i = 10^(d ÷ 2); day11_blink(stone ÷ i, n) + day11_blink(stone % i, n)) :
+          day11_blink(stone * 2024, n)
+    if key <= CACHE_SIZE
+        day11_int_cache[key] = len
     else
-        day11_int_cache[stone, n + 1] = len
+        day11_cache[key] = len
     end
     return len
 end
