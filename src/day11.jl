@@ -1,4 +1,4 @@
-using Memoization
+using Memoize
 
 const DIR = "aoc_2024"
 
