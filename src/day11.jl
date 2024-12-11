@@ -6,9 +6,7 @@ function day11()
     base_stones = parse.(Int, split(read("$DIR/day11.txt", String), r"\s+"))
 
     function blink(stone)
-        if iszero(stone) 
-            return [1]
-        end
+        iszero(stone) && return [1]
         n = ndigits(stone)
         if iseven(n)
             i = n ÷ 2
@@ -29,28 +27,24 @@ function day11()
     end
     part[1] = length(stones)
 
-    stones = copy(base_stones)
-    stonecounts = Dict(s => 1 for s in stones)
-    new_stonecounts = empty(stonecounts)
+    stone_counts = Dict(s => 1 for s in base_stones)
+    new_stone_counts = empty(stone_counts)
     for i in 1:75
-        for (stone, n) in stonecounts
+        for (stone, n) in stone_counts
             for s in blink(stone)
-                if !haskey(new_stonecounts, s)
-                    new_stonecounts[s] = n 
+                if !haskey(new_stone_counts, s)
+                    new_stone_counts[s] = n 
                 else
-                    new_stonecounts[s] += n 
+                    new_stone_counts[s] += n 
                 end
             end
         end
-        stonecounts, new_stonecounts = new_stonecounts, stonecounts
-        empty!(new_stonecounts)
+        stone_counts, new_stone_counts = new_stone_counts, stone_counts
+        empty!(new_stone_counts)
     end
-
-    part[2] = sum(values(stonecounts))
+    part[2] = sum(values(stone_counts))
 
     return part
 end
-
-@btime day11()
 
 @show day11() # [624, 1483]
