@@ -29,7 +29,7 @@ function day11()
 
     stone_counts = Dict(s => 1 for s in base_stones)
     new_stone_counts = empty(stone_counts)
-    for i in 1:75
+    for _ in 1:75
         for (stone, n) in stone_counts
             for s in blink(stone)
                 if !haskey(new_stone_counts, s)
