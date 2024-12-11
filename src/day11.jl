@@ -16,7 +16,7 @@ end
 
 function day11()
     base_stones = parse.(Int, split(read("$DIR/day11.txt", String), r"\s+"))
-    return sum([day11_blink(s, 25) for s in base_stones]), sum([day11_blink(s, 75) for s in base_stones])
+    return sum(day11_blink(s, 25) for s in base_stones), sum(day11_blink(s, 75) for s in base_stones)
 end
 
 @show day11() # [193269, 228449040027793]
