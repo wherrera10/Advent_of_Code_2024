@@ -1,52 +1,22 @@
-using Memoize
+using Memoization
 
 const DIR = "aoc_2024"
 
+@memoize function day11_blink(stone, iterations)
+    iterations < 1 && return 1
+    iterations -= 1
+    iszero(stone) && return day11_blink(1, iterations)
+    n = ndigits(stone)
+    if iseven(n)
+        i = 10^(n ÷ 2)
+        return day11_blink(stone ÷ i, iterations) + day11_blink(stone % i, iterations)
+    end
+    return day11_blink(stone * 2024, iterations)
+end
+
 function day11()
-    part = [0, 0]
-
     base_stones = parse.(Int, split(read("$DIR/day11.txt", String), r"\s+"))
-
-    @memoize function blink(stone)
-        iszero(stone) && return [1]
-        n = ndigits(stone)
-        if iseven(n)
-            i = n ÷ 2
-            d = digits(stone)
-            return [evalpoly(10, d[i+1:end]), evalpoly(10, d[1:i])]
-        end
-        return [stone * 2024]
-    end
-
-    new_stones = Int[]
-    stones = copy(base_stones)
-    for _ in 1:25
-        for stone in stones
-            append!(new_stones, blink(stone))
-        end
-        stones, new_stones = new_stones, stones
-        empty!(new_stones)
-    end
-    part[1] = length(stones)
-
-    stone_counts = Dict(s => 1 for s in base_stones)
-    new_stone_counts = empty(stone_counts)
-    for _ in 1:75
-        for (stone, n) in stone_counts
-            for s in blink(stone)
-                if !haskey(new_stone_counts, s)
-                    new_stone_counts[s] = n 
-                else
-                    new_stone_counts[s] += n 
-                end
-            end
-        end
-        stone_counts, new_stone_counts = new_stone_counts, stone_counts
-        empty!(new_stone_counts)
-    end
-    part[2] = sum(values(stone_counts))
-
-    return part
+    return sum([day11_blink(s, 25) for s in base_stones]), sum(day11_blink(s, 75) for s in base_stones)
 end
 
 @show day11() # [193269, 228449040027793]
