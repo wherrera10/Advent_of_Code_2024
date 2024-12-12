@@ -1,4 +1,4 @@
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 const MAX_BLINKS = 75
 const CACHE_SIZE = MAX_BLINKS * 10_000_000
 const day11_int_cache = zeros(Int, CACHE_SIZE)
