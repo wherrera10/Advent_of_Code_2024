@@ -8,7 +8,7 @@ function day11_blink(stone, n)
     n < 1 && return 1
     n -= 1
     iszero(stone) && return day11_blink(1, n)
-    key = stone * CACHE_SIZE + n
+    key = stone * MAX_BLINKS + n
     if key <= CACHE_SIZE && (cached = day11_int_cache[key] > 0)
         return cached
     end
