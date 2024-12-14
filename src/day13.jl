@@ -7,25 +7,20 @@ function day13()
     text = read("$DIR/day13.txt", String)
     machines = split(text, "\n\n")
     regex = r"\D+(\d+)\D+(\d+)"
+
     for m in machines
         a, b, p = split(m, "\n")
         ax, ay = parse.(Int, match(regex, a).captures)
         bx, by = parse.(Int, match(regex, b).captures)
         px, py = parse.(Int, match(regex, p).captures)
         A = [ax bx; ay by]
-
-        if abs(det(A)) > 0.01
-            a, b = round.(A \ [px, py])
-            if ax * a + bx * b == px && ay * a + by * b == py
-                part[1] += 3a + b
-            end
-        end
-
-        p2x, p2y = (px, py) .+ 10000000000000
-        if abs(det(A)) > 0.01
-            a, b = round.(A \ [p2x, p2y])
-            if ax * a + bx * b == p2x && ay * a + by * b == p2y
-                part[2] += 3a + b
+        for (i, n) in enumerate((0, 10000000000000))
+            px, py = (px, py) .+ n
+            if abs(det(A)) > 0.01
+                a, b = round.(A \ [px, py])
+                if ax * a + bx * b == px && ay * a + by * b == py
+                    part[i] += 3a + b
+                end
             end
         end
     end
