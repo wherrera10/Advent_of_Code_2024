@@ -6,13 +6,9 @@ function day13()
     part = [0, 0]
     text = read("$DIR/day13.txt", String)
     machines = split(text, "\n\n")
-    regex = r"\D+(\d+)\D+(\d+)"
-
+    regex = r"\D+(\d+)\D+(\d+)\n\D+(\d+)\D+(\d+)\n\D+(\d+)\D+(\d+)"
     for m in machines
-        a, b, p = split(m, "\n")
-        ax, ay = parse.(Int, match(regex, a).captures)
-        bx, by = parse.(Int, match(regex, b).captures)
-        px, py = parse.(Int, match(regex, p).captures)
+        ax, ay, bx, by, px, py = parse.(Int, match(regex, m).captures)
         A = [ax bx; ay by]
         for (i, n) in enumerate((0, 10000000000000))
             px, py = (px, py) .+ n
