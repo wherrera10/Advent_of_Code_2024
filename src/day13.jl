@@ -1,6 +1,6 @@
 import LinearAlgebra.det
 
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 function day13()
     part = [0, 0]
