@@ -6,9 +6,8 @@ function day12()
     mat = vcat(mat[1, :]', mat, mat[1, :]')
     mat = hcat(mat[:, 1], mat, mat[:, 1])
     rows, cols = size(mat)
-    mat[[1, rows], :] .= UInt8(' ')
-    mat[:, [1, cols]] .= UInt8(' ')
-    gardens = Vector{Vector{Int}}[]
+    mat[[1, rows], :] .= UInt8(' ') # wrap top and bottom
+    mat[:, [1, cols]] .= UInt8(' ') # wrap left and right sides
     found = Set{Vector{Int}}()
     directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
     right_turn(i) = directions[mod1(i + 1, 4)]
@@ -85,7 +84,6 @@ function day12()
         c = [x, y]
         if c ∉ found
             garden_plot = flood_fill(c)
-            push!(gardens, garden_plot)
             for p in garden_plot
                 push!(found, p)
             end
@@ -97,4 +95,4 @@ function day12()
     return part
 end
 
-@show day12() #  [ 1359028, 839780]
+@show day12() #  [1359028, 839780]
