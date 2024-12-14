@@ -11,10 +11,10 @@ function day13()
         ax, ay, bx, by, px, py = parse.(Int, match(regex, m).captures)
         A = [ax bx; ay by]
         for (i, n) in enumerate((0, 10000000000000))
-            px, py = (px, py) .+ n
+            x, y = (px, py) .+ n
             if abs(det(A)) > 0.01
-                a, b = round.(A \ [px, py])
-                if ax * a + bx * b == px && ay * a + by * b == py
+                a, b = round.(A \ [x, y])
+                if ax * a + bx * b == x && ay * a + by * b == y
                     part[i] += 3a + b
                 end
             end
