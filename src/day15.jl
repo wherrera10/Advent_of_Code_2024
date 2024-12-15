@@ -1,6 +1,6 @@
 const DIR = "aoc_2024"
 
-function can_move_row_day15(mat, dir, p, mov)
+function row_tiles_to_move_day15(mat, dir, p, mov)
     indexes = [p]
     d = dir[mov]
     if mat[p] != 'O' && mov ∈ [1, 3] # north, south
@@ -27,7 +27,7 @@ function step_day15(mat, rows, cols, directions, pos, mov)
         pos = next_pos
         mat[pos] = '@'
     elseif mat[next_pos] in "[]O"
-        indexes = can_move_row_day15(mat, directions, next_pos, mov)
+        indexes = row_tiles_to_move_day15(mat, directions, next_pos, mov)
         if !isempty(indexes)
             d = directions[mov]
             for c in indexes
@@ -37,7 +37,7 @@ function step_day15(mat, rows, cols, directions, pos, mov)
                     break
                 end
                 if mat[p2] != '.'
-                    indexes2 = can_move_row_day15(mat, directions, p2, mov)
+                    indexes2 = row_tiles_to_move_day15(mat, directions, p2, mov)
                     if isempty(indexes2)
                         empty!(indexes)
                         break
