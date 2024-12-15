@@ -1,57 +1,51 @@
 const DIR = "aoc_2024"
 
-function day08()
-    grid = stack((collect(line) for line in split(read("$DIR/day08.txt", String), "\n")), dims = 1)
-    rows, cols = size(grid)
-    delta(p1, p2) = [p2[1] - p1[1], p2[2] - p1[2]]
+function day14()
+    part = [0, 0]
 
-    function antinodes(p1, p2)
-        nodes = Vector{Vector{Int}}()
-        d = delta(p1, p2)
-        push!(nodes, [p1[1] - d[1], p1[2] - d[2]], [p2[1] + d[1], p2[2] + d[2]])
-        return filter(n -> 1 <= n[1] <= rows && 1 <= n[2] <= cols, nodes)
+    regex = r"[^\d-]+([\d-]+)[^\d-]+([\d-]+)[^\d-]+([\d-]+)[^\d-]+([\d-]+)"
+    robots = Vector{Int}[]
+    for line in readlines("$DIR/day14.txt")
+        push!(robots, parse.(Int, match(regex, line)))
     end
+    x_size, y_size = 101, 103       
+    quad_counts = [0, 0, 0, 0]
 
-    function updated_rules(p1, p2)
-        nodes = Vector{Vector{Int}}()
-        d = delta(p1, p2)
-        d .÷= gcd(d[1], d[2])
-        p = copy(p1)
-        while 1 <= p[1] <= rows && 1 <= p[2] <= cols
-            push!(nodes, p)
-            p = p .- d
-        end
-        p = copy(p1)
-        while 1 <= p[1] <= rows && 1 <= p[2] <= cols
-            push!(nodes, p)
-            p = p .+ d
-        end
-        return nodes
-    end
-
-    frequencies = Dict{Char, Vector{Vector{Int}}}()
-    for p in CartesianIndices(grid)
-        if grid[p] != '.'
-            if !haskey(frequencies, grid[p])
-                frequencies[grid[p]] = Vector{Vector{Int}}()
+    for r in robots
+        x, y = mod(r[1] + 100 * r[3], x_size), mod(r[2] + 100 * r[4], y_size)
+        if x < 50
+            if y < 51
+                quad_counts[2] += 1
+            elseif y > 51
+                quad_counts[3] += 1
             end
-            push!(frequencies[grid[p]], [p[1], p[2]])
-        end
-    end
-
-    locations = Vector{Int}[]
-    updated = Vector{Int}[]
-    for pos in values(frequencies)
-        for i in eachindex(pos)
-            for j in i+1:length(pos)
-                nodes = antinodes(pos[i], pos[j])
-                append!(locations, nodes)
-                nodes = updated_rules(pos[i], pos[j])
-                append!(updated, nodes)
+        elseif x > 50
+            if y < 51
+                quad_counts[1] += 1
+            elseif y > 51
+                quad_counts[4] += 1
             end
         end
     end
-    length(unique(locations)), length(unique(updated))
+    part[1] = prod(quad_counts)
+
+    col_sums, row_sums = zeros(Int, x_size), zeros(Int, y_size)
+    for i in 1:100_000
+        for r in robots
+            r[1] = mod(r[1] + r[3], x_size)
+            r[2] = mod(r[2] + r[4], y_size)
+            col_sums[r[1] + 1] += 1
+            row_sums[r[2] + 1] += 1
+        end
+        if any(>(30), col_sums) && any(>(30), row_sums)
+            part[2] = i
+            break
+        end
+        col_sums .= 0
+        row_sums .= 0
+    end
+
+    return part
 end
 
-@show day08() # (361, 1249)
+@show day14() #  [223020000, 7338]
