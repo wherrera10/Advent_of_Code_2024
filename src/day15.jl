@@ -147,8 +147,7 @@ function day15()
     end
     part[2] = total_score2()
 
-
     return part
 end
 
-@show day15() # (1530215, 26800609)
+@show day15() # [1509863, 1548815]
