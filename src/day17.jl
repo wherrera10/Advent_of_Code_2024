@@ -65,4 +65,4 @@ function day17()
     return part
 end
 
-@show day17()
+@show day17() # [Int8[2, 0, 7, 3, 0, 3, 1, 3, 7], 247839539763386]
