@@ -1,12 +1,15 @@
-using Graphs, DataStructures, SparseArrays, Memoization
+using Graphs, DataStructures, SparseArrays
 
 const DIR = "aoc_2024"
 
-@memoize function dfs16(vtx, set, arr)
+function dfs16(vtx, set, allset, arr)
     a = arr[vtx]
     for p in a
-        push!(set, p ÷ 5)
-        dfs16(p, set, arr)
+        if p ∉ allset
+            push!(allset, p)
+            push!(set, p ÷ 5)
+            dfs16(p, set, allset, arr)
+        end
     end
 end
 
@@ -54,7 +57,8 @@ function day16()
     part[1] = state.dists[stop_vertex]
 
     all_path_tiles = Set{Int}()
-    dfs16(stop_vertex, all_path_tiles, state.predecessors)
+    all_moves = Set{Int}()
+    dfs16(stop_vertex, all_path_tiles, all_moves, state.predecessors)
     part[2] = length(all_path_tiles) + 1
 
     return part
