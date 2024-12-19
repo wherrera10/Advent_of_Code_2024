@@ -52,13 +52,12 @@ function day17()
     candidates = Int[]
     for i in eachindex(d)
         for j in 0:7
-            arr = copy(d)
-            arr[i] = j
-            a = evalpoly(8, arr)
-            v = run(program, a, b, c)
-            if length(v) == len && v == program
+            prev = d[i]
+            d[i] = j
+            if program == run(program, evalpoly(8, d), b, c)
                 push!(candidates, a)
             end
+            d[i] = prev
         end
     end
     part[2] = minimum(candidates)
