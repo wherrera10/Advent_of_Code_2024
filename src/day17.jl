@@ -12,10 +12,10 @@ const DIR = "aoc_2024"
     first octal digits of A should reflect the last digits of the program.
     
     Working backwards with pencil and paper and the Julia REPL, we got octal 
-    number 026424356514772 (base 8) working as candidate for A. 
+    number 7026424356514772 (base 8) working as candidate for A. 
     
     This was not the minimum, though, so below we loop and check octal digit
-    changes in 0o026424356514772 to find part 2's minimum value.
+    changes in 0o7026424356514772 to find part 2's minimum value.
 """
 function day17()
     part = [Int8[], 0]
