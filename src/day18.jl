@@ -1,8 +1,6 @@
-using BenchmarkTools
-
 using Graphs
 
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 scalar18(c, n) = (c[1] - 1) * n + c[2]
 scalar18(x, y, n) = (x - 1) * n + y
@@ -58,7 +56,5 @@ function day18()
 
     return part
 end
-
-@btime day18()
 
 @show day18() # [436, (61, 50)]
