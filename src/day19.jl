@@ -1,5 +1,3 @@
-using BenchmarkTools
-
 using Memoization
 
 const DIR = "aoc_2024"
