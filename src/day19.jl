@@ -2,7 +2,7 @@ using BenchmarkTools
 
 using Memoization
 
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 @memoize function can_make19(design, patterns)
     for p in patterns
@@ -33,7 +33,6 @@ end
     return can_count
 end
 
-
 function day19()
     part = [0, 0]
 
@@ -45,5 +44,4 @@ function day19()
     return part
 end
 
-
-@show day19() # 
+@show day19() #  [358, 600639829400603]
