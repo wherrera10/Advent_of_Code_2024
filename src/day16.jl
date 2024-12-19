@@ -1,8 +1,6 @@
-using BenchmarkTools
-
 using Graphs, DataStructures, SparseArrays, Memoization
 
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 @memoize function dfs16(vtx, set, arr)
     a = arr[vtx]
@@ -61,7 +59,5 @@ function day16()
 
     return part
 end
-
-@btime day16()
 
 @show day16() # [106512, 563]
