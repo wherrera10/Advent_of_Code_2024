@@ -21,24 +21,34 @@ function day17()
     part = [Int8[], 0]
     arr = parse.(Int, filter(!isempty, split(read("$DIR/day17.txt", String), r"[\D]+")))
     a, b, c, program = arr[1], arr[2], arr[3], arr[4:end]
+    combo(i, a, b, c) = i < 4 ? i : i == 4 ? a : i == 5 ? b : i == 6 ? c : error("bad operand $i")   
 
     function run(program, a, b=0, c=0)
-        ip = 0
+        ip = [0]
         len = length(program)
         output = Int8[]
-        combo(i) = i < 4 ? i : i == 4 ? a : i == 5 ? b : i == 6 ? c : error("bad operand $i")   
-        f0(i) =  (a = a ÷ 2^combo(i)) # adv   
-        f1(i) = (b = b ⊻ i) # bxl
-        f2(i) = (b = combo(i) % 8) # bst
-        f3(i) = (if a != 0 ip = i - 2 end)     #jnz
-        f4(_) = (b = b ⊻ c) #bxc
-        f5(i) = (push!(output, combo(i) % 8))   # out
-        f6(i) = (b = a ÷ 2^(combo(i)))  # bdv
-        f7(i) = (c = a ÷ 2^(combo(i)))   # cdv
-        codes = [f0, f1, f2, f3, f4, f5, f6, f7]
         for i in 1:typemax(Int32)
             ip >= len && break
             opr, opd = program[ip + 1], program[ip+2]
+            if opr == 0
+                a = a ÷ 2^combo(i, a, b, c)
+            elseif opr == 1
+                b = b ⊻ i
+            elseif opr == 2
+                b = combo(i, a, b, c) % 8
+            elseif opr == 3
+                a != 0 && (ip = i - 2)
+            elseif opr == 4
+                b = b ⊻ c
+            elseif opr == 5
+                push!(output, combo(i, a, b, c) % 8)
+            elseif opr == 6
+                b = a ÷ 2^(combo(i, a, b, c))
+            elseif opr == 7
+                c = a ÷ 2^(combo(i, a, b, c))
+            else
+                error("Bad AOC CPU opcode")
+            end
             codes[opr + 1](opd)
             ip += 2
         end
