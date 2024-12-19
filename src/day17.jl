@@ -1,34 +1,33 @@
 const DIR = "aoc_2024"
 
-combo(i, a, b, c) = i < 4 ? i : i == 4 ? a : i == 5 ? b : i == 6 ? c : error("bad operand $i")   
+combo17(i, a, b, c) = i < 4 ? i : i == 4 ? a : i == 5 ? b : i == 6 ? c : error("bad operand $i")   
 
 function run17(program, a, b=0, c=0)
-        ip = [0]
+        ip = 0
         len = length(program)
         output = Int8[]
-        for i in 1:typemax(Int32)
+        for _ in 1:typemax(Int32)
             ip >= len && break
             opr, opd = program[ip + 1], program[ip+2]
             if opr == 0
-                a = a ÷ 2^combo(i, a, b, c)
+                a = a ÷ 2^combo17(opd, a, b, c)
             elseif opr == 1
-                b = b ⊻ i
+                b = b ⊻ opd
             elseif opr == 2
-                b = combo(i, a, b, c) % 8
+                b = combo17(opd, a, b, c) % 8
             elseif opr == 3
-                a != 0 && (ip = i - 2)
+                a != 0 && (ip = opd - 2)
             elseif opr == 4
                 b = b ⊻ c
             elseif opr == 5
-                push!(output, combo(i, a, b, c) % 8)
+                push!(output, combo17(opd, a, b, c) % 8)
             elseif opr == 6
-                b = a ÷ 2^(combo(i, a, b, c))
+                b = a ÷ 2^(combo17(opd, a, b, c))
             elseif opr == 7
-                c = a ÷ 2^(combo(i, a, b, c))
+                c = a ÷ 2^(combo17(opd, a, b, c))
             else
                 error("Bad AOC CPU opcode")
             end
-            codes[opr + 1](opd)
             ip += 2
         end
         return output
