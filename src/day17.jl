@@ -1,37 +1,37 @@
 const DIR = "aoc_2024"
 
-combo17(i, a, b, c) = i < 4 ? i : i == 4 ? a : i == 5 ? b : i == 6 ? c : error("bad operand $i")   
+combo17(i, a, b, c) = i < 4 ? i : i == 4 ? a : i == 5 ? b : i == 6 ? c : error("bad operand $i")
 
-function run17(program, a, b=0, c=0)
-        ip = 0
-        len = length(program)
-        output = Int8[]
-        for _ in 1:typemax(Int32)
-            ip >= len && break
-            opr, opd = program[ip + 1], program[ip+2]
-            if opr == 0
-                a = a ÷ 2^combo17(opd, a, b, c)
-            elseif opr == 1
-                b = b ⊻ opd
-            elseif opr == 2
-                b = combo17(opd, a, b, c) % 8
-            elseif opr == 3
-                a != 0 && (ip = opd - 2)
-            elseif opr == 4
-                b = b ⊻ c
-            elseif opr == 5
-                push!(output, combo17(opd, a, b, c) % 8)
-            elseif opr == 6
-                b = a ÷ 2^(combo17(opd, a, b, c))
-            elseif opr == 7
-                c = a ÷ 2^(combo17(opd, a, b, c))
-            else
-                error("Bad AOC CPU opcode")
-            end
-            ip += 2
+function run17(program, a, b = 0, c = 0)
+    ip = 0
+    len = length(program)
+    output = Int8[]
+    for _ in 1:typemax(Int32)
+        ip >= len && break
+        opr, opd = program[ip+1], program[ip+2]
+        if opr == 0
+            a = a ÷ 2^combo17(opd, a, b, c)
+        elseif opr == 1
+            b = b ⊻ opd
+        elseif opr == 2
+            b = combo17(opd, a, b, c) % 8
+        elseif opr == 3
+            a != 0 && (ip = opd - 2)
+        elseif opr == 4
+            b = b ⊻ c
+        elseif opr == 5
+            push!(output, combo17(opd, a, b, c) % 8)
+        elseif opr == 6
+            b = a ÷ 2^(combo17(opd, a, b, c))
+        elseif opr == 7
+            c = a ÷ 2^(combo17(opd, a, b, c))
+        else
+            error("Bad AOC CPU opcode")
         end
-        return output
+        ip += 2
     end
+    return output
+end
 
 
 """
@@ -55,13 +55,12 @@ function day17()
     part = [Int8[], 0]
     arr = parse.(Int, filter(!isempty, split(read("$DIR/day17.txt", String), r"[\D]+")))
     a, b, c, program = arr[1], arr[2], arr[3], arr[4:end]
-    
-
     part[1] = run17(program, a, b, c)
+
     target = copy(program)
     len = length(program)
     oct = 0o7026424356514772
-    d = digits(oct, base=8)
+    d = digits(oct, base = 8)
     candidates = Int[]
     for i in eachindex(d)
         for j in 0:7
@@ -77,4 +76,4 @@ function day17()
     return part
 end
 
-@show day17()
+@show day17() [Int8[2, 0, 7, 3, 0, 3, 1, 3, 7], 18427963]
