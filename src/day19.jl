@@ -4,44 +4,31 @@ using Memoization
 
 const DIR = "aoc_2024"
 
-@memoize function can_make19(design, patterns)
+@memoize function can19(design, patterns)
     for p in patterns
         p == design && return true
     end
     for p in patterns
-        if startswith(design, p)
-            design2 = design[length(p)+1:end]
-            if can_make19(design2, patterns)
-                return true
-            end
-        end
+        startswith(design, p) && can19(design[length(p)+1:end], patterns) && return true
     end
     return false
 end
 
-@memoize function all_can_make19(design, patterns)
-    can_count = 0
+@memoize function all19(design, patterns)
+    n = 0
     for p in patterns
-        p == design && (can_count += 1)
+        p == design && (n += 1)
     end
     for p in patterns
-        if startswith(design, p)
-            design2 = design[length(p)+1:end]
-            can_count += all_can_make19(design2, patterns)
-        end
+        startswith(design, p) && (n += all19(design[length(p)+1:end], patterns))
     end
-    return can_count
+    return n
 end
 
 function day19()
-    part = [0, 0]
-
     text1, text2 = split(read("$DIR/day19.txt", String), "\n\n")
-    patterns = filter(!isempty, split(text1, r"\s?,\s?"))
-    desired = split(text2, r"\s+")
-    part[1] = count(can_make19(d, patterns) for d in desired)
-    part[2] = sum(all_can_make19(d, patterns) for d in desired)
-    return part
+    patterns, desired = split(text1, r"\s?,\s?"), split(text2, r"\s+")
+    count(can19(d, patterns) for d in desired), sum(all19(d, patterns) for d in desired)
 end
 
 @show day19() #  [358, 600639829400603]
