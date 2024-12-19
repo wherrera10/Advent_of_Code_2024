@@ -4,26 +4,9 @@ using Memoization
 
 const DIR = "aoc_2024"
 
-@memoize function can19(design, patterns)
-    for p in patterns
-        p == design && return true
-    end
-    for p in patterns
-        startswith(design, p) && can19(design[length(p)+1:end], patterns) && return true
-    end
-    return false
-end
+@memoize can19(s, a) = any(p == s || startswith(s, p) && can19(s[length(p)+1:end], a) for p in a)
 
-@memoize function all19(design, patterns)
-    n = 0
-    for p in patterns
-        p == design && (n += 1)
-    end
-    for p in patterns
-        startswith(design, p) && (n += all19(design[length(p)+1:end], patterns))
-    end
-    return n
-end
+@memoize all19(s, a) = sum((p == s) + (startswith(s, p) ? (all19(s[length(p)+1:end], a)) : 0) for p in a)
 
 function day19()
     text1, text2 = split(read("$DIR/day19.txt", String), "\n\n")
