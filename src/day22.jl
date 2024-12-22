@@ -27,11 +27,10 @@ function day22()
 
     sums = zeros(Int, 19^4)
     Threads.@threads for i in eachindex(sequences)
-        for a in 0:19^4-1
-            v = digits(a, base = 19, pad = 4) .- 9
-            pos = findfirst(j -> all(v .== @view diffs[i][j:j+3]), 1:1997)
+        for a in Iterators.product(-9:9, -9:9, -9:9, -9:9)
+            pos = findfirst(j -> all(a .== @view diffs[i][j:j+3]), 1:1997)
             isnothing(pos) && continue
-            sums[a] += sequences[i][pos+4]
+            sums[evalpoly(19, a .+ 9)] += sequences[i][pos+4]
         end
     end
     part[2] = maximum(sums)
