@@ -1,8 +1,6 @@
 using BenchmarkTools
 
-using Graphs, SparseArrays
-
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 next22(n) = (a = ((n * 64) ⊻ n) % 16777216; b = ((a ÷ 32) ⊻ a) % 16777216; ((b * 2048) ⊻ b) % 16777216)
 bananas22(n, k) = (a = [n % 10]; for _ in 1:k push!(a, n % 10); n = next22(n) end; (a, diff(a)))
@@ -10,7 +8,6 @@ bananas22(n, k) = (a = [n % 10]; for _ in 1:k push!(a, n % 10); n = next22(n) en
 function day22()
     part = [0, 0]
     numbers = parse.(Int, split(read("$DIR/day22.txt", String), r"\s+"))
-    #numbers = [1,2,3,2024]
     len = length(numbers)
     run_length, diff_length = 2000, 1999
 
