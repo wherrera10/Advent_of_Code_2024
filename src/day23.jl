@@ -5,13 +5,19 @@ const DIR = "aoc_2024"
 function day23()
     part = [0, ""]
 
-    link_lines = readlines("$DIR/day23.txt")
-    links = [split(strip(s), "-") for s in link_lines]
+    links = [split(strip(line), "-") for line in readlines("$DIR/day23.txt")]
     len = length(links) # 3380
 
-    for i in 1:len, j in i+1:len, k in j+1:len
-        a = unique([links[i]; links[j]; links[k]])
-        length(a) == 3 && any(s -> startswith(s, 't'), a) && (part[1] += 1)
+    locker = ReentrantLock()
+    @Threads.threads for i in 1:len
+        for j in i+1:len, k in j+1:len
+            a = unique([links[i]; links[j]; links[k]])
+            if length(a) == 3 && any(s -> startswith(s, 't'), a)
+                lock(locker)
+                part[1] += 1
+                unlock(locker)
+            end
+        end
     end
 
     computers = sort!(unique!(reduce(vcat, links)))
@@ -24,7 +30,7 @@ function day23()
         add_edge!(g, e2, e1)
     end
     q = maximal_cliques(g)
-    _, idx = findmax(v -> length(v), q)
+    _, idx = findmax(length, q)
     part[2] = join(sort!(map(n -> numbers_to_names[n], q[idx])), ",")
 
     return part
