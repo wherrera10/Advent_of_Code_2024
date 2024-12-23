@@ -13,10 +13,9 @@ function day23()
         if startswith(links[i][1], 't') || startswith(links[j][1], 't') || startswith(links[k][1], 't') ||
            startswith(links[i][2], 't') || startswith(links[j][2], 't') || startswith(links[k][2], 't')
             trip = unique([links[i]; links[j]; links[k]])
-            length(trip) == 3 && any(s -> startswith(s, 't'), trip) && part[1] += 1
+            length(trip) == 3 && any(s -> startswith(s, 't'), trip) && (part[1] += 1)
         end
     end
-    part[1] = length(triplets)
 
     computers = sort!(unique!(reduce(vcat, links)))
     numbers_to_names = Dict(enumerate(computers))
