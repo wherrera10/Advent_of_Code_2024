@@ -8,17 +8,23 @@ function day23()
     links = [split(strip(line), "-") for line in readlines("$DIR/day23.txt")]
     len = length(links) # 3380
 
-    locker = ReentrantLock()
-    @Threads.threads for i in 1:len
-        for j in i+1:len, k in j+1:len
-            a = unique([links[i]; links[j]; links[k]])
-            if length(a) == 3 && any(s -> startswith(s, 't'), a)
-                lock(locker)
-                part[1] += 1
-                unlock(locker)
+    triplets = Set{String}()
+    for a in links
+        for pos in findall(x -> (x[1] ∈ a || x[2] ∈ a) && a != x, links)
+            b = links[pos]
+            ab = [a; b]
+            b = filter(c -> count(==(c), ab) == 1, ab)
+            b2 = [b, reverse(b)]
+            pos2 = findfirst(k -> k ∈ b2, links)
+            if !isnothing(pos2)
+                abc = unique!([a; b; links[pos2]])
+                if length(abc) == 3 && any(s -> startswith(s, 't'), abc)
+                    push!(triplets, join(sort!(abc)))
+                end
             end
         end
     end
+    part[1] = length(triplets)
 
     computers = sort!(unique!(reduce(vcat, links)))
     numbers_to_names = Dict(enumerate(computers))
