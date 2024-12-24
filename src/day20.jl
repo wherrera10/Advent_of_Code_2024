@@ -44,8 +44,8 @@ function day20()
     stop_c = vec20(findfirst(c -> grid[c] == 'E', CartesianIndices(grid)))
 
     distances = fill(NIL20, rows, cols)
-    delta, surround, new_surround = 0, [stop_c], Vector{Int}[]
-    while !isempty(surround)
+    surround, new_surround = [stop_c], Vector{Int}[]
+    for delta in 0:rows*cols
         for (x, y) in surround
             distances[x, y] = delta
         end
@@ -55,9 +55,9 @@ function day20()
                 grid[x2, y2] != '#' && distances[x2, y2] == NIL20 && push!(new_surround, [x2, y2])
             end
         end
+        isempty(new_surround) && break
         surround, new_surround = new_surround, surround
         empty!(new_surround)
-        delta += 1
     end
 
     part[1] = count_cheats20(distances, rows, cols, signs, 2, 100)
