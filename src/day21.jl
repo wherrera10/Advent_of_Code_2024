@@ -1,8 +1,6 @@
-using BenchmarkTools
-
 using Memoization
 
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 const numeric21 = ['7' '8' '9'; '4' '5' '6'; '1' '2' '3'; ' ' '0' 'A']
 const directional21 = [' ' '^' 'A'; '<' 'v' '>']
