@@ -80,6 +80,4 @@ function day21()
     return part
 end
 
-@btime day21()
-
-@show day21()
+@show day21() # [163920, 204040805018350]
