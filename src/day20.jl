@@ -1,8 +1,4 @@
-using BenchmarkTools
-
-using Graphs, SparseArrays
-
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 vec20(c) = [c[1], c[2]]
 scalar20(c, n) = Int32((c[1] - 1) * n + c[2])
