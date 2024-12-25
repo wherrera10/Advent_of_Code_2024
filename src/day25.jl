@@ -13,4 +13,4 @@ function day25()
     return count(all(c -> t[c] + b[c] <= rows, 1:cols) for t in key_sums, b in lock_sums)
 end
 
-@show day25() [2978, 0]
+@show day25() # 2978
