@@ -54,7 +54,7 @@ function day24()
     end
 
     swap_items = String[]
-    for (i, a) in enumerate(routines)
+    for a in routines
         if 2 < length(a)  < 5
             a[2][4], a[3][4] = a[3][4], a[2][4]
             push!(swap_items, a[2][4], a[3][4])
@@ -64,7 +64,7 @@ function day24()
     end
     sort!.(routines, by = a -> a[1][1] == 'y' ? a[1] : a[2], rev = true)
 
-    for (i, a) in enumerate(routines)
+    for a in routines
         if length(a) == 5
             if a[3][4][1] != 'z'
                 j = a[4][4][1] == 'z' ? 4 : 5
