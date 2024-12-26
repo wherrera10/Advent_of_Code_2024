@@ -1,6 +1,4 @@
-using BenchmarkTools
-
-const DIR = "C:/Users/wherr/OneDrive/Documents/Julia Programs/aoc_2024"
+const DIR = "aoc_2024"
 
 function day24()
     part = [0, ""]
@@ -83,7 +81,5 @@ function day24()
 
     return part
 end
-
-@btime day24()
 
 @show day24() # [59364044286798, "cbj,cfk,dmn,gmt,qjj,z07,z18,z35"]
