@@ -55,11 +55,16 @@ function day24()
 
     swap_items = String[]
     for a in routines
-        if 2 < length(a)  < 5
-            a[2][4], a[3][4] = a[3][4], a[2][4]
-            push!(swap_items, a[2][4], a[3][4])
-            missing_routines = filter(v -> a[2][4] ∈ v && v ∉ a, d_eq)
-            append!(a, missing_routines)
+        if 2 < length(a) < 5
+            if a[3][4][1] != 'z'
+                j = findfirst(v -> v[4][1] == 'z', a)
+                if !isnothing(j)
+                    a[j][4], a[3][4] = a[3][4], a[j][4]
+                    push!(swap_items, a[2][4], a[3][4])
+                    missing_routines = filter(v -> a[2][4] ∈ v && v ∉ a, d_eq)
+                    append!(a, missing_routines)
+                end
+            end
         end
     end
     sort!.(routines, by = a -> a[1][1] == 'y' ? a[1] : a[2], rev = true)
