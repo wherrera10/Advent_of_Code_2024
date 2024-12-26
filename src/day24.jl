@@ -6,14 +6,10 @@ function day24()
     v_text, eq_text = split(read("$DIR/day24.txt", String), "\n\n")
 
     all_z_var = Set{String}()
-    all_x_var = Set{String}()
-    all_y_var = Set{String}()
     d_val = Dict{String, Bool}()
     for line in split(v_text, "\n")
         var, s = split(line, r":\s*")
         d_val[var] = parse(Bool, s)
-        startswith(var, 'x') && push!(all_x_var, var)
-        startswith(var, 'y') && push!(all_y_var, var)
     end
     vals = deepcopy(d_val)
 
