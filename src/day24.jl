@@ -60,7 +60,7 @@ function day24()
                 j = findfirst(v -> v[4][1] == 'z', a)
                 if !isnothing(j)
                     a[j][4], a[3][4] = a[3][4], a[j][4]
-                    push!(swap_items, a[2][4], a[3][4])
+                    push!(swap_items, a[j][4], a[3][4])
                     missing_routines = filter(v -> a[2][4] ∈ v && v ∉ a, d_eq)
                     append!(a, missing_routines)
                 end
