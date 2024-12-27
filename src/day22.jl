@@ -25,23 +25,23 @@ function day22()
         unique!(all_diff)
     end
 
-    a = Dict{Vector{Int8}, BitSet}()
-    b = Dict{Vector{Int8}, Int}()
+    still_await = Dict{Vector{Int8}, BitSet}()
+    sums = Dict{Vector{Int8}, Int}()
     d4 = diffs[1:4] 
     j, len = 5, length(diffs) - 4
     while j < len
-        if !haskey(a, d4)
-            a[d4] = trues(len(sequences))
+        if !haskey(still_await, d4)
+            still_await[d4] = trues(len(sequences))
         end
-        if a[d4][i]
-            a[d4][i] = false
-            b[d4] += prices[j]
+        if still_await[d4][i]
+            still_await[d4][i] = false
+            sums[d4] += prices[j]
         end
         popfirst!(d4)
         push!(d4, diffs[j])
         j += 1
     end   
-    part[2] = maximum(values(b))
+    part[2] = maximum(values(sums))
 
     return part
 end
