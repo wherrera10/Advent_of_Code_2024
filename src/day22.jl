@@ -34,7 +34,7 @@ function day22()
             a[d4] = trues(len(sequences))
         end
         if a[d4][i]
-            a[d4]i] = false
+            a[d4][i] = false
             b[d4] += prices[j]
         end
         popfirst!(d4)
