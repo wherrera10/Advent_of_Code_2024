@@ -25,15 +25,23 @@ function day22()
         unique!(all_diff)
     end
 
-    sums = zeros(Int, 19^4)
-    Threads.@threads for i in eachindex(sequences)
-        for a in Iterators.product(-9:9, -9:9, -9:9, -9:9)
-            pos = findfirst(j -> all(a .== @view diffs[i][j:j+3]), 1:1997)
-            isnothing(pos) && continue
-            sums[evalpoly(19, a .+ 9)] += sequences[i][pos+4]
+    a = Dict{Vector{Int8}, BitSet}()
+    b = Dict{Vector{Int8}, Int}()
+    d4 = diffs[1:4] 
+    j, len = 5, length(diffs) - 4
+    while j < len
+        if !haskey(a, d4)
+            a[d4] = trues(len(sequences))
         end
-    end
-    part[2] = maximum(sums)
+        if a[d4][i]
+            a[d4]i] = false
+            b[d4] += prices[j]
+        end
+        popfirst!(d4)
+        push!(d4, diffs[j])
+        j += 1
+    end   
+    part[2] = maximum(values(b))
 
     return part
 end
