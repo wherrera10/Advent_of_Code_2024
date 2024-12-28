@@ -1,52 +1,74 @@
 const DIR = "aoc_2024"
 
+right_turn6(d) = mod1(d + 1, 4)
 function day06()
-	part = [0, 0]
-	DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-	right_turn(d) = mod1(d + 1, 4)
-	grid = stack((collect(line) for line in split(read("$DIR/day06.txt", String), "\n")), dims = 1)
-	rows, cols = size(grid)
-	guard = findfirst(==('^'), grid)
-	pos = [guard[1], guard[2]]
-	visited = Set{Vector{Int}}()
-	d = 1
-	while true
-		push!(visited, pos)
-		next = pos .+ DIRECTIONS[d]
-		!(1 <= next[1] <= rows && 1 <= next[2] <= cols) && break
-		if grid[next[1], next[2]] == '#'
-			d = right_turn(d)
-		else
-			pos = next
-		end
-	end
-	part[1] = length(visited)
+    part = [0, 0]
+    DIRECTIONS = [[-1, 0], [0, 1], [1, 0], [0, -1]]
+    grid = stack((collect(line) for line in split(read("$DIR/day06.txt", String), "\n")), dims = 1)
+    rows, cols = size(grid)
+    guard = findfirst(==('^'), grid)
+    pos = [guard[1], guard[2]]
+    visited = Set{Vector{Int}}()
+    guard_states = Dict{Vector{Int}, Vector{Int}}()
+    d = 1 # guard is facing north ^ at start
+    while true
+        push!(visited, pos)
+        next = pos .+ DIRECTIONS[d]
+        !(1 <= next[1] <= rows && 1 <= next[2] <= cols) && break
+        if grid[next[1], next[2]] == '#'
+            d = right_turn6(d)
+        else
+            if next ∉ visited
+                guard_states[[pos[1], pos[2], d]] = [next[1], next[2]]
+            end
+            pos = next
+        end
+    end
+    part[1] = length(visited)
 
-	delete!(visited, [guard[1], guard[2]])
-    p_lock = ReentrantLock()
-	Threads.@threads for v in collect(visited)
-		visited_d = Set{Vector{Int}}()
-		td = 1
-		p = [guard[1], guard[2]]
-		while true
-			state = [p[1], p[2], td]
-			if state in visited_d
-				lock(p_lock)
-				part[2] += 1
-				unlock(p_lock)
-				break
-			end
-			push!(visited_d, state)
-			next = p .+ DIRECTIONS[td]
-			!(1 <= next[1] <= rows && 1 <= next[2] <= cols) && break
-			if grid[next[1], next[2]] == '#' || next == v
-				td = right_turn(td)
-			else
-				p = next
-			end
-		end
-	end
-	return part
+    possible_jumps = Dict{Vector{Int}, Vector{Int}}()
+    for ((x, y, d), (x_obstacle, y_obstacle)) in collect(guard_states) # every place for an obstacle
+        visited2 = Set{Vector{Int}}()
+        push!(visited2, [x, y, d]) # direction sensitive for part 2
+        off_grid = false
+        while true
+            dx, dy = DIRECTIONS[d]
+            old_state = [x, y, d]
+            if x != x_obstacle && y != y_obstacle && haskey(possible_jumps, [x, y, d])
+                x, y, d = possible_jumps[[x, y, d]]
+                if x == 0
+                    break
+                end
+            else
+                while true # move along til obstruction or off grid
+                    x += dx
+                    y += dy
+                    if !(1 <= x <= rows && 1 <= y <= cols)
+                        possible_jumps[[x, y, d]] = [0, 0, 0] # off grid
+                        off_grid = true
+                        break
+                    elseif x == x_obstacle && y == y_obstacle || grid[x, y] == '#'
+                        x -= dx
+                        y -= dy
+                        d = right_turn6(d)
+                        if x != x_obstacle && y != y_obstacle
+                            possible_jumps[old_state] = [x, y, d]
+                        end
+                        break
+                    end
+                end
+            end
+            off_grid && break
+            if [x, y, d] ∈ visited2
+                part[2] += 1
+                break
+            else
+                push!(visited2, [x, y, d])
+            end
+        end
+    end
+
+    return part
 
 end
 
