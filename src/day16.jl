@@ -1,65 +1,50 @@
-using Graphs, DataStructures, SparseArrays
-
 const DIR = "aoc_2024"
 
-function dfs16(vtx, set, allset, arr)
-    a = arr[vtx]
-    for p in a
-        if p ∉ allset
-            push!(allset, p)
-            push!(set, p ÷ 5)
-            dfs16(p, set, allset, arr)
-        end
-    end
-end
-
+left16(d) = mod1(d - 1, 4)
+right16(d) = mod1(d + 1, 4)
 function day16()
     part = [0, 0]
-    start_dir = 2 # set this way by problem text to be East
-    stop_dir = 2 # determined by exam of data file to be East
 
     mat = stack([collect(line) for line in readlines("$DIR/day16.txt")], dims = 1)
     rows, cols = size(mat)
     directions = [[-1, 0], [0, 1], [1, 0], [0, -1]]
-    scalar(c, d) = Int32(((c[1] - 1) * cols + c[2]) * 5 + d)
-    descale(x) = [(x ÷ 5) ÷ cols, (x ÷ 5) % cols]
     start_c = findfirst(c -> mat[c] == 'S', CartesianIndices(mat))
-    start_vertex = scalar(start_c, start_dir)
+    xb, yb = start_c[1], start_c[2]
     stop_c = findfirst(c -> mat[c] == 'E', CartesianIndices(mat))
-    stop_vertex = scalar(stop_c, stop_dir)
-    distmx = spzeros(Int32, rows * cols * 5 + 4, rows * cols * 5 + 4)
+    xe, ye = stop_c[1], stop_c[2]
+    mat[stop_c] = '.'
 
-    g = SimpleGraph{Int32}(rows * cols * 10)
-    d_mat(v1, v2) = abs(v1 - v2) > 4 ? 1 : 1000
-    for c in CartesianIndices(mat)
-        mat[c] == '#' && continue
-        for start_d in 1:4
-            for turn_d in 1:4
-                start_d == turn_d && continue
-                abs(start_d - turn_d) == 2 && continue  # no 180 turns
-                v1, v2 = scalar(c, start_d), scalar(c, turn_d)
-                add_edge!(g, v1, v2)
-                distmx[v1, v2] = 1000
-                distmx[v2, v1] = 1000
-            end
-            adj = Tuple(c) .+ directions[start_d]
-            if 1 <= adj[1] <= rows && 1 <= adj[2] <= cols && mat[adj[1], adj[2]] != '#'
-                v1, v2 = scalar(c, start_d), scalar(adj, start_d)
-                add_edge!(g, v1, v2)
-                distmx[v1, v2] = 1
-                distmx[v2, v1] = 1
+    moves = [[0, xb, yb, 2]]
+    costs_mat = fill(typemax(Int), rows, cols)
+    costs_mat[xb, yb] = 0
+    while !isempty(moves)
+        sort!(moves)
+        cost, x, y, d = popfirst!(moves)
+        for (d2, c2) in [[d, cost + 1], [left16(d), cost + 1001], [right16(d), cost + 1001]]
+            x2, y2 = x + directions[d2][1], y + directions[d2][2]
+            if 1 <= x2 <= rows && 1 <= y2 <= cols && mat[x2, y2] != '#' && c2 < costs_mat[x2, y2]
+                costs_mat[x2, y2] = c2
+                push!(moves, [c2, x2, y2, d2])
             end
         end
     end
-    distmx = transpose(sparse(transpose(distmx)))
+    part[1] = costs_mat[xe, ye]
 
-    state = dijkstra_shortest_paths(g, [start_vertex], distmx, maxdist = 150000, allpaths = true)
-    part[1] = state.dists[stop_vertex]
-
-    all_path_tiles = Set{Int}()
-    all_moves = Set{Int}()
-    dfs16(stop_vertex, all_path_tiles, all_moves, state.predecessors)
-    part[2] = length(all_path_tiles) + 1
+    moves = [[costs_mat[xe, ye], xe, ye, 3], [costs_mat[xe, ye], xe, ye, 4]]
+    visited = Set{Vector{Int}}()
+    while !isempty(moves)
+        sort!(moves)
+        cost, x, y, d = popfirst!(moves)
+        for (d2, c2) in [[d, cost - 1], [left16(d), cost - 1001], [right16(d), cost - 1001]]
+            x2, y2 = x + directions[d2][1], y + directions[d2][2]
+            if 1 <= x2 <= rows && 1 <= y2 <= cols && costs_mat[x2, y2] ∈ [c2, c2 - 1000] && [x2, y2] ∉ visited
+                part[2] += 1
+                push!(moves, [c2, x2, y2, d2])
+                push!(visited, [x2, y2])
+            end
+        end
+    end
+    part[2] += 1
 
     return part
 end
