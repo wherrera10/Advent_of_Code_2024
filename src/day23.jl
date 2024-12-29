@@ -1,4 +1,4 @@
-using Combinatorics, Graphs
+using Graphs
 
 const DIR = "aoc_2024"
 
