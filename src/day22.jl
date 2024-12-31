@@ -23,7 +23,7 @@ function day22()
     end
 
     unseen = trues(19, 19, 19, 19, length(diffs))
-    sums = zeros(Int16, 19, 19, 19, 19)
+    sums = zeros(Int32, 19, 19, 19, 19)
     a, b, c, d = 0, 0, 0, 0
     len = length(diffs[1])
     for i in eachindex(diffs)
