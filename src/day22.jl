@@ -1,9 +1,9 @@
 const DIR = "aoc_2024"
 
 function next22(n)
-    a = ((n * 64) ⊻ n) % 16777216
-    b = ((a ÷ 32) ⊻ a) % 16777216
-    return ((b * 2048) ⊻ b) % 16777216
+    n = ((n * 64) ⊻ n) % 16777216
+    n = ((n ÷ 32) ⊻ n) % 16777216
+    ((n * 2048) ⊻ n) % 16777216
 end
 
 function day22()
@@ -21,21 +21,20 @@ function day22()
         part[1] += n
         diffs[i] = Int8.(diff(sequences[i]))
     end
+
     unseen = trues(19, 19, 19, 19, length(diffs))
-    sums = zeros(Int, 19, 19, 19, 19)
+    sums = zeros(Int16, 19, 19, 19, 19)
     a, b, c, d = 0, 0, 0, 0
+    len = length(diffs[1])
     for i in eachindex(diffs)
         a, b, c, d = diffs[i][1:4] .+ 10
-        j = 5
-        len = length(diffs[i]) - 3
-        while j < len
+        for j in 5:len
             if unseen[a, b, c, d, i]
                 unseen[a, b, c, d, i] = false
                 sums[a, b, c, d] += sequences[i][j]
             end
             a, b, c = b, c, d
             d = diffs[i][j] + 10
-            j += 1
         end
     end
     part[2] = maximum(sums)
