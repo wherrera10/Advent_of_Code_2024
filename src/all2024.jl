@@ -29,7 +29,7 @@ day25   0.0005779
 Total   0.1669827
 """
 
-using BenchmarkTools, Memoization
+using BenchmarkTools, Graphs, LinearAlgebra, Memoization
 
 const DIR = "aoc_2024"
 
