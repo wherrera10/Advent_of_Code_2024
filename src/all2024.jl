@@ -427,21 +427,11 @@ function day12()
                         end
                     end
                 end
-                q2 = d & quadrants[1] # upper left, quadrant 2
-                if q2 == 0 || q2 == quadrants[1] && mat[x-1, y-1] != v
-                    corners += 1
-                end
-                q1 = d & quadrants[2]
-                if q1 == 0 || q1 == quadrants[2] && mat[x-1, y+1] != v
-                    corners += 1
-                end
-                q3 = d & quadrants[3]
-                if q3 == 0 || q3 == quadrants[3] && mat[x+1, y-1] != v
-                    corners += 1
-                end
-                q4 = d & quadrants[4]
-                if q4 == 0 || q4 == quadrants[4] && mat[x+1, y+1] != v
-                    corners += 1
+                for (i, dx, dy) in [(1, -1, -1), (2, -1, 1), (3, 1, -1), (4, 1, 1)]
+                    q = d & quadrants[i]
+                    if q == 0 || q == quadrants[i] && mat[x + dx, y + dy] != v
+                        corners += 1
+                    end
                 end
                 perimeter += edge_count
             end
