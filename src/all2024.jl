@@ -1,33 +1,33 @@
 """
  Day     Seconds
 =================
-day01   0.0002689
-day02   0.0007851
-day03   0.0021963
-day04   0.0005749
-day05   0.0029599
-day06   0.0184707
-day07   0.0011864
-day08   0.0002062
-day09   0.0086304
-day10   0.0007387
-day11   2.04e-5
-day12   0.0011338
-day13   0.0003851
-day14   0.0114518
-day15   0.0014027
-day16   0.0047609
-day17   6.14e-5
-day18   0.0045459
-day19   0.0267167
-day20   0.0143851
-day21   2.33e-5
-day22   0.0486529
-day23   0.0034437
-day24   0.0039606
-day25   0.0005775
+day01   0.0002636
+day02   0.0007942
+day03   0.0021105
+day04   0.0005642
+day05   0.0032486
+day06   0.018282
+day07   0.0011929
+day08   0.0002015
+day09   0.0085071
+day10   0.0007336
+day11   1.85e-5
+day12   0.0011119
+day13   0.0003834
+day14   0.0111692
+day15   0.0013758
+day16   0.0046334
+day17   6.05e-5
+day18   0.0044444
+day19   0.0238405
+day20   0.0144332
+day21   2.46e-5
+day22   0.036901
+day23   0.0034165
+day24   0.0039299
+day25   0.0005664
 =================
-Total   0.1575393
+Total   0.142207
 """
 
 using BenchmarkTools, Graphs, LinearAlgebra, Memoization
@@ -427,11 +427,21 @@ function day12()
                         end
                     end
                 end
-                for (i, dx, dy) in [(1, -1, -1), (2, -1, 1), (3, 1, -1), (4, 1, 1)]
-                    q = d & quadrants[i]
-                    if q == 0 || q == quadrants[i] && mat[x + dx, y + dy] != v
-                        corners += 1
-                    end
+                q2 = d & quadrants[1] # upper left, quadrant 2
+                if q2 == 0 || q2 == quadrants[1] && mat[x-1, y-1] != v
+                    corners += 1
+                end
+                q1 = d & quadrants[2]
+                if q1 == 0 || q1 == quadrants[2] && mat[x-1, y+1] != v
+                    corners += 1
+                end
+                q3 = d & quadrants[3]
+                if q3 == 0 || q3 == quadrants[3] && mat[x+1, y-1] != v
+                    corners += 1
+                end
+                q4 = d & quadrants[4]
+                if q4 == 0 || q4 == quadrants[4] && mat[x+1, y+1] != v
+                    corners += 1
                 end
                 perimeter += edge_count
             end
@@ -945,7 +955,7 @@ end
 function day22()
     part = [0, 0]
     numbers = parse.(Int, split(read("$DIR/day22.txt", String), r"\s+"))
-    sequences, diffs = [Int[] for _ in eachindex(numbers)], [Int8[] for _ in eachindex(numbers)]
+    sequences, diffs = [Int8[] for _ in eachindex(numbers)], [Int8[] for _ in eachindex(numbers)]
     n = 0
     for i in eachindex(numbers)
         n = numbers[i]
