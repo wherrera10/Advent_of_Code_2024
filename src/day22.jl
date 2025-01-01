@@ -1,11 +1,10 @@
 const DIR = "aoc_2024"
 
 function next22(n)
-    n = ((n * 64) ⊻ n) % 16777216
-    n = ((n ÷ 32) ⊻ n) % 16777216
-    ((n * 2048) ⊻ n) % 16777216
+    n = ((n << 6) ⊻ n) & 0xffffff
+    n = ((n >> 5) ⊻ n) % 16777216
+    ((n << 11) ⊻ n) % 16777216
 end
-
 function day22()
     part = [0, 0]
     numbers = parse.(Int, split(read("$DIR/day22.txt", String), r"\s+"))
