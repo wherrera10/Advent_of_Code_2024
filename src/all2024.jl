@@ -938,9 +938,9 @@ function day21()
 end
 
 function next22(n)
-    a = ((n * 64) ⊻ n) % 16777216
-    b = ((a ÷ 32) ⊻ a) % 16777216
-    return ((b * 2048) ⊻ b) % 16777216
+    n = ((n << 6) ⊻ n) & 0xffffff
+    n = ((n >> 5) ⊻ n) % 16777216
+    ((n << 11) ⊻ n) % 16777216
 end
 function day22()
     part = [0, 0]
