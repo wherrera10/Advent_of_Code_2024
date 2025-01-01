@@ -955,7 +955,7 @@ function day22()
             push!(sequences[i], n % 10)
         end
         part[1] += n
-        diffs[i] = Int8.(diff(sequences[i]))
+        diffs[i] = (diff(sequences[i])
     end
     unseen = trues(19, 19, 19, 19, length(diffs))
     sums = zeros(Int, 19, 19, 19, 19)
