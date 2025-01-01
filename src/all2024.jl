@@ -1,32 +1,33 @@
 """
  Day     Seconds
 =================
-day01   0.0002742
-day02   0.0008181
-day03   0.002173
-day04   0.0005901
-day05   0.0033631
-day06   0.0189197
-day07   0.0012557
-day08   0.0002077
-day09   0.0085946
-day10   0.00074
-day12   0.0011334
-day13   0.0003833
-day14   0.0115075
-day15   0.0014487
-day16   0.004888
-day17   6.07e-5
-day18   0.0045564
-day19   0.0233845
-day20   0.0141714
-day21   2.32e-5
-day22   0.0604968
-day23   0.003449
-day24   0.0039657
-day25   0.0005779
+day01   0.0002719
+day02   0.0007734
+day03   0.0021855
+day04   0.0005727
+day05   0.0029477
+day06   0.0183021
+day07   0.0011924
+day08   0.0002046
+day09   0.0085578
+day10   0.0007381
+day11   2.05e-5
+day12   0.0011169
+day13   0.00038
+day14   0.0117053
+day15   0.0014036
+day16   0.0047014
+day17   6.16e-5
+day18   0.0045095
+day19   0.0240462
+day20   0.0140604
+day21   2.34e-5
+day22   0.0623175
+day23   0.0034276
+day24   0.0039302
+day25   0.0005799
 =================
-Total   0.1669827
+Total   0.1680302
 """
 
 using BenchmarkTools, Graphs, LinearAlgebra, Memoization
@@ -35,7 +36,7 @@ const DIR = "aoc_2024"
 
 function day01()
     numbers = parse.(Int, split(read("$DIR/day01.txt", String), r"\s+"))
-    a, b = sort!(numbers[1:2:length(numbers)]), sort!(numbers[2:2:length(numbers)])
+    a, b = sort!(numbers[1:2:lastindex(numbers)]), sort!(numbers[2:2:lastindex(numbers)])
     sum(abs.(a .- b)), sum(a[i] * count(==(a[i]), b) for i in eachindex(a))
 end
 
@@ -313,7 +314,7 @@ function day09()
     end
 
     disk = copy(raw_disk)
-    for i in length(runs):-1:1
+    for i in lastindex(runs):-1:1
         for j in 1:run_sizes[i]
             pos = popfirst!(gap_positions)
             if pos < runs[i] + j - 1
@@ -947,11 +948,10 @@ function day21()
 end
 
 function next22(n)
-    n = ((n * 64) ⊻ n) % 16777216
-    n = ((n ÷ 32) ⊻ n) % 16777216
-    ((n * 2048) ⊻ n) % 16777216
+    a = ((n * 64) ⊻ n) % 16777216
+    b = ((a ÷ 32) ⊻ a) % 16777216
+    return ((b * 2048) ⊻ b) % 16777216
 end
-
 function day22()
     part = [0, 0]
     numbers = parse.(Int, split(read("$DIR/day22.txt", String), r"\s+"))
@@ -967,20 +967,21 @@ function day22()
         part[1] += n
         diffs[i] = Int8.(diff(sequences[i]))
     end
-
     unseen = trues(19, 19, 19, 19, length(diffs))
-    sums = zeros(Int32, 19, 19, 19, 19)
+    sums = zeros(Int, 19, 19, 19, 19)
     a, b, c, d = 0, 0, 0, 0
     len = length(diffs[1])
     for i in eachindex(diffs)
         a, b, c, d = diffs[i][1:4] .+ 10
-        for j in 5:len
+        j = 5
+        while j <= len
             if unseen[a, b, c, d, i]
                 unseen[a, b, c, d, i] = false
                 sums[a, b, c, d] += sequences[i][j]
             end
             a, b, c = b, c, d
             d = diffs[i][j] + 10
+            j += 1
         end
     end
     part[2] = maximum(sums)
@@ -1007,7 +1008,7 @@ function day23()
     for v in vertices(g)
         if haskey(numbers_to_names, v) && startswith(numbers_to_names[v], 't')
             neigh = neighbors(g, v)
-            for i in eachindex(neigh), j in i:length(neigh)
+            for i in eachindex(neigh), j in i+1:lastindex(neigh)
                 if has_edge(g, neigh[i], neigh[j])
                     push!(triplets, sort!([v, neigh[i], neigh[j]]))
                 end
@@ -1122,7 +1123,7 @@ end
 function time2024()
     tsum = 0.0
     println(" Day     Seconds\n=================")
-    for f in [day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day12, day13,
+    for f in [day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12, day13,
         day14, day15, day16, day17, day18, day19, day20, day21, day22, day23, day24, day25]
         t = @belapsed $f()
         println(f, "   ", t)
