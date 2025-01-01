@@ -8,7 +8,7 @@ end
 function day22()
     part = [0, 0]
     numbers = parse.(Int, split(read("$DIR/day22.txt", String), r"\s+"))
-    sequences, diffs = [Int[] for _ in eachindex(numbers)], [Int8[] for _ in eachindex(numbers)]
+    sequences, diffs = [Int8[] for _ in eachindex(numbers)], [Int8[] for _ in eachindex(numbers)]
     n = 0
     for i in eachindex(numbers)
         n = numbers[i]
