@@ -1,33 +1,33 @@
 """
- Day     Seconds
+  Day     Seconds
 =================
-day01   0.0002636
-day02   0.0007942
-day03   0.0021105
-day04   0.0005642
-day05   0.0032486
-day06   0.018282
-day07   0.0011929
-day08   0.0002015
-day09   0.0085071
-day10   0.0007336
-day11   1.85e-5
-day12   0.0011119
-day13   0.0003834
-day14   0.0111692
-day15   0.0013758
-day16   0.0046334
-day17   6.05e-5
-day18   0.0044444
-day19   0.0238405
-day20   0.0144332
-day21   2.46e-5
-day22   0.036901
-day23   0.0034165
-day24   0.0039299
-day25   0.0005664
+day01   0.0002657
+day02   0.0007796
+day03   0.0021092
+day04   0.0005594
+day05   0.0029903
+day06   0.0180535
+day07   0.0011705
+day08   0.0001979
+day09   0.0084865
+day10   0.0007287
+day11   1.94e-5
+day12   0.0012827
+day13   0.0003819
+day14   0.0110826
+day15   0.0013672
+day16   0.0048786
+day17   6.01e-5
+day18   0.0044539
+day19   0.0241525
+day20   0.0142705
+day21   2.43e-5
+day22   0.0308818
+day23   0.0033859
+day24   0.0039265
+day25   0.0005711
 =================
-Total   0.142207
+Total   0.1360803
 """
 
 using BenchmarkTools, Graphs, LinearAlgebra, Memoization
@@ -429,7 +429,7 @@ function day12()
                 end
                 for (i, dx, dy) in [(1, -1, -1), (2, -1, 1), (3, 1, -1), (4, 1, 1)]
                     q = d & quadrants[i]
-                    if q == 0 || q == quadrants[i] && mat[x + dx, y + dy] != v
+                    if q == 0 || q == quadrants[i] && mat[x+dx, y+dy] != v
                         corners += 1
                     end
                 end
@@ -497,8 +497,8 @@ function day14()
     col_sums, row_sums = zeros(Int, x_size), zeros(Int, y_size)
     for i in 1:100_000
         for r in robots
-            r[1]             = mod(r[1] + r[3], x_size)
-            r[2]             = mod(r[2] + r[4], y_size)
+            r[1] = mod(r[1] + r[3], x_size)
+            r[2] = mod(r[2] + r[4], y_size)
             col_sums[r[1]+1] += 1
             row_sums[r[2]+1] += 1
         end
@@ -570,7 +570,6 @@ function step_day15(mat, rows, cols, directions, pos, mov)
     end # do nothing if mat[next_pos] == '#'
     return pos
 end
-
 score15(p) = 100 * (p[1] - 1) + p[2] - 1
 total_score15(mat) = sum(map(score15, filter(c -> mat[c] ∈ "[O", CartesianIndices(mat))))
 function day15()
@@ -808,7 +807,7 @@ function day19()
     patterns, desired = split(text1, r"\s?,\s?"), split(text2, r"\s+")
     locker = ReentrantLock()
     n_can, n_all = 0, 0
-    Threads.@threads for s in desired
+    @inbounds Threads.@threads for s in desired
         k = all19(s, patterns)
         if k > 0
             lock(locker)
@@ -861,7 +860,7 @@ function day20()
         end
     end
 
-    return part
+    return part # [1197, 944910]
 end
 
 const NUMERIC_PAD21 = ['7' '8' '9'; '4' '5' '6'; '1' '2' '3'; ' ' '0' 'A']
@@ -955,13 +954,13 @@ function day22()
             push!(sequences[i], n % 10)
         end
         part[1] += n
-        diffs[i] = (diff(sequences[i])
+        diffs[i] = Int8.(diff(sequences[i]))
     end
     unseen = trues(19, 19, 19, 19, length(diffs))
     sums = zeros(Int, 19, 19, 19, 19)
     a, b, c, d = 0, 0, 0, 0
     len = length(diffs[1])
-    for i in eachindex(diffs)
+    @inbounds for i in eachindex(diffs)
         a, b, c, d = diffs[i][1:4] .+ 10
         j = 5
         while j <= len
