@@ -25,7 +25,7 @@ function day22()
     sums = zeros(Int32, 19, 19, 19, 19)
     a, b, c, d = 0, 0, 0, 0
     len = length(diffs[1])
-    for i in eachindex(diffs)
+    @inbounds for i in eachindex(diffs)
         a, b, c, d = diffs[i][1:4] .+ 10
         for j in 5:len
             if unseen[a, b, c, d, i]
